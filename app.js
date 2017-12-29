@@ -60,10 +60,34 @@ app.intent('Help',
         "slots":{},
         "utterances":[ "{for|to|} {help|assistance}" ]
     },
-    function(request,response) {
+    function(request, response) {
         console.log("Help requested, adding card.");
         response.say(constants.say_launch + constants.say_card);
         response.card("Help", constants.card_help);
+    }
+);
+
+// Basic controller functions
+
+app.intent('SendCommand',
+    {
+        "slots": {"KODICOMMAND": "KODICOMMAND_SLOT"},
+        "utterances": ["{send|send the command|click|click the|press|press the|} +TIVOCOMMAND+"]
+    },
+    function(request, response) {
+
+        var command = request.slot("KODICOMMAND").toLowerCase();
+        kodi.input.executeAction(command);
+    }
+);
+
+app.intent("SendText",
+    {
+        "slots": {"SEARCHTEXT": "SEARCHTEXT_SLOT"},
+        "utterances": ["{to send text|send text|to type|type} +SEARCHTEXT+"]
+    },
+    function(request, response) {
+        kodi.input.sendText(request.slot("SEARCHTEXT").toLowerCase());
     }
 );
 
