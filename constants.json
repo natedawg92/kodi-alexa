@@ -1,0 +1,10 @@
+{
+	"say_welcome": "Welcome to Kodi Alexa.",
+	"say_launch": "You can say things like Alexa, tell Kodi to pause, or Alexa, tell Kodi to launch Exodus.",
+	"say_card": "I've added a card to your Alexa app with more help and detailed examples.",
+	"say_error": "Sorry, an error has occured. Please try your request again.",
+
+	"card_help": "Welcome to Kodi Alexa! You can use this skill to voice control your Kodi Instances through Alexa-enabled devices like the Amazon Echo or Dot.\n\u22C5\nAll of the voice commands start with 'Alexa, tell/ask Kodi to ...'",
+
+	"alexaTestAppId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+}

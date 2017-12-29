@@ -1,0 +1,14 @@
+{
+  "alexaAppId": "",
+  "route": "kodi-alexa",
+
+  "kodis": [
+    {
+      "name": "<Kodi name>",
+      "url": "<IP address:port>",
+      "user": "<username>",
+      "password": "<password>"
+    }
+  ]
+
+}
