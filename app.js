@@ -2,6 +2,7 @@
 var alexa = require('alexa-app');
 var kodi_rpc = require('node-kodi');
 require('log-timestamp');
+var WtoN = require('words-to-num');
 
 // load configuration parameters
 var config = require("./config.json");
@@ -88,6 +89,77 @@ app.intent("SendText",
     },
     function(request, response) {
         kodi.input.sendText(request.slot("SEARCHTEXT").toLowerCase());
+    }
+);
+
+app.intent("PlayPause",
+    {
+        "slots": {},
+        "utterances": ["{to|to press|to click|press|click|} {play|pause}"]
+    },
+    function(request, response) {
+        kodi.player.playPause();
+    }
+);
+
+app.intent("Stop",
+    {
+        "slots": {},
+        "utterances": ["{to|to press|to click|press|click|} stop"]
+    },
+    function(request, response) {
+        kodi.player.stop();
+    }
+);
+
+app.intent("getInfo",
+    {
+        "slots": {},
+        "utterances": ["get Info"]
+    },
+    async function(request, response){
+        console.log(await kodi.player.getItem());
+        console.log(await kodi.player.getProperties());
+    }
+);
+
+app.intent("FastForward",
+    {
+        "slots": {"SPEED": "SPEED_SLOT"},
+        "utterances": ["{to|} fast forward {times|at speed|} +SPEED+"]
+    },
+    function(request, response) {
+        var speed = request.slot("SPEED") || 2;
+        
+        if (typeof speed == "string"){
+            speed = WtoN.convert(speed.toLowerCase());
+        }
+
+        kodi.player.setSpeed({
+            "speed": speed,
+            "playerid": 1,
+        });
+    }
+);
+
+app.intent("rewind",
+    {
+        "slots": {"SPEED": "SPEED_SLOT"},
+        "utterances": ["{to|} rewind {times|at speed|} +SPEED+"]
+    },
+    function(request, response) {
+        var speed = request.slot("SPEED") || 2;
+        
+        if (typeof speed == "string"){
+            speed = WtoN.convert(speed.toLowerCase());
+        }
+
+        speed = 0 - speed;
+
+        kodi.player.setSpeed({
+            "speed": speed,
+            "playerid": 1,
+        });
     }
 );
 
