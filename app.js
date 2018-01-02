@@ -163,6 +163,23 @@ app.intent("rewind",
     }
 );
 
+app.intent("WhatIsPlaying",
+    {
+        "slots": {},
+        "utterances": ["{to get|get|to find out|find out|} what is {currently|} playing"]
+    },
+    async function(request, response) {
+        let activePlayer = await kodi.player.getActivePlayers();
+
+        let activeSource = await kodi.player.getItem({
+            "properties": ["title", "album", "artist", "duration", "thumbnail", "file", "fanart", "streamdetails"],
+            "playerid": activePlayer.playerid
+        });
+
+        response.say("Currently Playing " + activeSource.item.label + " by " + activeSource.item.artist);
+    }
+);
+
 // Functions
 function upddatCurrentKodiConfig(kodiIndex)
 {
