@@ -73,7 +73,7 @@ app.intent('Help',
 app.intent('SendCommand',
     {
         "slots": {"KODICOMMAND": "KODICOMMAND_SLOT"},
-        "utterances": ["{send|send the command|click|click the|press|press the|} +TIVOCOMMAND+"]
+        "utterances": ["{send|send the command|click|click the|press|press the|} +KODICOMMAND+"]
     },
     function(request, response) {
 
@@ -84,11 +84,11 @@ app.intent('SendCommand',
 
 app.intent("SendText",
     {
-        "slots": {"SEARCHTEXT": "SEARCHTEXT_SLOT"},
-        "utterances": ["{to send text|send text|to type|type} +SEARCHTEXT+"]
+        "slots": {"TEXT": "TEXT_SLOT"},
+        "utterances": ["{to send text|send text|to type|type} +TEXT+"]
     },
     function(request, response) {
-        kodi.input.sendText(request.slot("SEARCHTEXT").toLowerCase());
+        kodi.input.sendText(request.slot("TEXT").toLowerCase());
     }
 );
 
