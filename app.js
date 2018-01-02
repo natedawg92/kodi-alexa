@@ -112,17 +112,6 @@ app.intent("Stop",
     }
 );
 
-app.intent("getInfo",
-    {
-        "slots": {},
-        "utterances": ["get Info"]
-    },
-    async function(request, response){
-        console.log(await kodi.player.getItem());
-        console.log(await kodi.player.getProperties());
-    }
-);
-
 app.intent("FastForward",
     {
         "slots": {"SPEED": "SPEED_SLOT"},
