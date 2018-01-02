@@ -14,6 +14,12 @@ var route = config.route || "kodi-alexa";
 // Define Kodi Instance variables
 var kodiInstanceId = 0;
 
+// Define Addon Variables
+var allAddons = {};
+var enabledAddons = {};
+var disabledAddons = {};
+var addonMenus = {}; 
+
 // Initialise Default Kodi instance (first one in config file)
 var kodi = new kodi_rpc({
     url: config.kodis[kodiInstanceId].url,
@@ -169,6 +175,27 @@ app.intent("WhatIsPlaying",
     }
 );
 
+app.intent("AddonInfoTest",
+    {
+        "slots": {"ADDON": "ADDON_SLOT"},
+        "utterances": ["get info for +ADDON+"]
+    },
+    async function(request, response) {
+        let addon = await kodi.addons.getAddonDetails({
+            'addonid': 'plugin.video.youtube', 
+            'properties': ['path']
+        });
+
+        console.log(addon.addon.path);
+
+        let addonMenu = await kodi.files.getDirectory('plugin://plugin.video.youtube');
+
+        let menu = await buildAddonMenu(addonMenu);
+
+        console.log('menu: ' + JSON.stringify(menu));  
+    }
+);
+
 // Functions
 function upddatCurrentKodiConfig(kodiIndex)
 {
@@ -178,6 +205,46 @@ function upddatCurrentKodiConfig(kodiIndex)
         password: config.kodis[kodiIndex].password,
         debug: config.kodis[kodiIndex].debug || false
     });
+}
+
+
+async function buildAddonMenu(menu, depth = 0)
+{
+    let addonMenu = {};
+    let subMenu = {};
+
+    let files = menu.files;
+
+    console.log(files);
+
+    console.log('length: ' + files.length);
+
+    for (var i = 0; i < files.length; i++) {
+
+        console.log('depth: ' + depth);
+        console.log('i: ' + i + ' = ' + files[i].label);
+
+        if (files[i].filetype == 'directory' && !files[i].label.match(/^next page.*/i) && !files[i].label.match(/sign in.*/i) && depth <= constants.addon_menu_max_depth) {
+            addonMenu[files[i].label] = {'link': files[i].file}
+            // try {
+                let subMenu = await kodi.files.getDirectory(files[i].file);
+                if (typeof subMenu !== 'undefined' && 'files' in subMenu) {
+                    console.log('Building Sub Menu for ' + files[i].label);
+                    let subMenuItems = await buildAddonMenu(subMenu, depth +1);
+
+                    if (subMenuItems.length > 1) {
+                        addonMenu[files[i].label]['sub_menu'] = subMenuItems;
+                    }
+                }
+            // } catch (error) {
+            //     console.log(error);
+            // }
+        }
+
+    }
+
+    // console.log(addonMenu);
+    return addonMenu;
 }
 
 module.exports = app;

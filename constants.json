@@ -6,5 +6,7 @@
 
 	"card_help": "Welcome to Kodi Alexa! You can use this skill to voice control your Kodi Instances through Alexa-enabled devices like the Amazon Echo or Dot.\n\u22C5\nAll of the voice commands start with 'Alexa, tell/ask Kodi to ...'",
 
+	"addon_menu_max_depth": 5,
+
 	"alexaTestAppId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
 }
